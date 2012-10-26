@@ -1,0 +1,8 @@
+*~
+.rbenv-version
+*.gem
+.bundle
+Gemfile.lock
+pkg/*
+test/.t
+tmp/*

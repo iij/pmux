@@ -1,0 +1,105 @@
+2000-12-31 21:31:01 START: foobarorController (pid 8180)
+2000-12-31 21:31:01 lock_path: "/tmp/zzzfoobaror-lock" (pid 8180)
+2000-12-31 21:31:01 sock_path: "/tmp/.foobarorsock.8180"
+2000-12-31 21:31:02 #1: (8182) start
+2000-12-31 21:31:02 foobar unknown bbbbbbbbbb.example.com
+2000-12-31 21:31:02 #2: (8183) start
+2000-12-31 21:31:02 foobar unknown tttttttttt.example.com
+2000-12-31 21:31:02 #3: (8184) start
+2000-12-31 21:31:02 foobar unknown qqqqqqqqqq.example.com
+2000-12-31 21:31:02 #4: (8185) start
+2000-12-31 21:31:02 foobar unknown oooooooooo.example.com
+2000-12-31 21:31:02 #5: (8186) start
+2000-12-31 21:31:02 foobar unknown dddddddddd.example.com
+2000-12-31 21:31:02 #6: (8187) start
+2000-12-31 21:31:02 foobar unknown cccccccccc.example.com
+2000-12-31 21:31:02 #7: (8188) start
+2000-12-31 21:31:02 foobar unknown rrrrrrrrrr.example.com
+2000-12-31 21:31:02 #8: (8189) start
+2000-12-31 21:31:02 foobar unknown aaaaaaaaaa.example.com
+2000-12-31 21:31:03 foobar unknown bbbbbbbbbb.example.com
+2000-12-31 21:31:03 #9: (8190) start
+2000-12-31 21:31:03 foobar unknown bbbbbbbbbb.example.com
+2000-12-31 21:31:03 #10: (8191) start
+2000-12-31 21:31:03 foobar unknown tttttttttt.example.com
+2000-12-31 21:31:03 foobar unknown bbbbbbbbbb.example.com
+2000-12-31 21:31:03 foobar unknown router1.example.jp
+2000-12-31 21:31:03 foobar unknown router0.example.jp
+2000-12-31 21:31:03 #6: (8187) end
+2000-12-31 21:31:04 #4: (8185) end
+2000-12-31 21:31:04 #10: (8191) end
+2000-12-31 21:31:04 #9: (8190) end
+2000-12-31 21:31:04 #1: (8182) end
+2000-12-31 21:31:04 #2: (8183) end
+2000-12-31 21:31:05 #5: (8186) end
+2000-12-31 21:31:05 #7: (8188) end
+2000-12-31 21:31:05 #8: (8189) end
+2000-12-31 21:31:05 #3: (8184) end
+2000-12-31 21:31:05 waiting children, done (pid 8180)
+2000-12-31 21:31:05 foobar unknown: elapsed 1.222222 sec
+2000-12-31 21:31:05 sock_path: "/tmp/.foobarorsock.8180"
+2000-12-31 21:31:07 #1: (8192) start
+2000-12-31 21:31:07 foobar unknown oooooooooo.example.com
+2000-12-31 21:31:07 #2: (8193) start
+2000-12-31 21:31:07 foobar unknown oooooooooo.example.com
+2000-12-31 21:31:11 qqqqqqqqqq.example.com: insert xxxxxxx: (99999 records in 1.222222 sec)
+2000-12-31 21:31:11 tttttttttt.example.com: insert xxxxxxxxxx: 99 records
+2000-12-31 21:31:11 rrrrrrrrrr.example.com: insert xxxxxxxxx: 9 records
+2000-12-31 21:31:11 jjjjjjjjjj.example.com: insert xxxxxxxxxxxxx: 99 records
+2000-12-31 21:31:11 nnnnnnnnnn.example.com: insert xxxxxxxxx: 9 records
+2000-12-31 21:31:11 pppppppppp.example.com: insert xxxxxxxx: 9999 records
+2000-12-31 21:31:11 tttttttttt.example.com: insert xxxxxxxxxxxx: 9 records
+2000-12-31 21:31:12 foobar unknown 192.168.195.12
+2000-12-31 21:31:13 192.168.195.12: insert xxxxxxx: (9999 records in 1.222222 sec)
+2000-12-31 21:31:13 192.168.195.12: insert xxxxxxxxxx: 99 records
+2000-12-31 21:31:13 192.168.195.12: insert xxxxxxxxx: 9 records
+2000-12-31 21:31:13 192.168.195.12: insert xxxxxxxxxxxxx: 99 records
+2000-12-31 21:31:13 192.168.195.12: insert xxxxxxxxx: 9 records
+2000-12-31 21:31:13 192.168.195.12: insert xxxxxxxx: 9 records
+2000-12-31 21:31:13 192.168.195.12: insert xxxxxxxxxxxx: 9 records
+2000-12-31 21:31:13 foobar unknown mmmmmmmmmm.example.com
+2000-12-31 21:31:16 ffffffffff.example.com: insert xxxxxxx: (99999 records in 1.222222 sec)
+2000-12-31 21:31:16 ffffffffff.example.com: insert xxxxxxxxxx: 99 records
+2000-12-31 21:31:16 ssssssssss.example.com: insert xxxxxxxxx: 9 records
+2000-12-31 21:31:16 qqqqqqqqqq.example.com: insert xxxxxxxxxxxxx: 99 records
+2000-12-31 21:31:16 pppppppppp.example.com: insert xxxxxxxxx: 9 records
+2000-12-31 21:31:16 nnnnnnnnnn.example.com: insert xxxxxxxx: 9999 records
+2000-12-31 21:31:16 jjjjjjjjjj.example.com: insert xxxxxxxxxxxx: 9 records
+2000-12-31 21:31:16 foobar unknown ssssssssss.example.com
+2000-12-31 21:31:24 mmmmmmmmmm.example.com: insert xxxxxxx: (99999 records in 11.222222 sec)
+2000-12-31 21:31:24 aaaaaaaaaa.example.com: insert xxxxxxxxxx: 99 records
+2000-12-31 21:31:24 aaaaaaaaaa.example.com: insert xxxxxxxxx: 9 records
+2000-12-31 21:31:24 bbbbbbbbbb.example.com: insert xxxxxxxxxxxxx: 99 records
+2000-12-31 21:31:24 pppppppppp.example.com: insert xxxxxxxxx: 9 records
+2000-12-31 21:31:24 ssssssssss.example.com: insert xxxxxxxx: 9999 records
+2000-12-31 21:31:24 pppppppppp.example.com: insert xxxxxxxxxxxx: 9 records
+2000-12-31 21:31:25 foobar unknown aaaaaaaaaa.example.com
+2000-12-31 21:31:26 foobar unknown router1.example.jp
+2000-12-31 21:31:26 router1.example.jp: insert xxxxxxx: (9999 records in 1.22222 sec)
+2000-12-31 21:31:26 router1.example.jp: insert xxxxxxxxxx: 99 records
+2000-12-31 21:31:26 router1.example.jp: insert xxxxxxxxx: 9 records
+2000-12-31 21:31:26 router1.example.jp: insert xxxxxxxxxxxxx: 9 records
+2000-12-31 21:31:26 router1.example.jp: insert xxxxxxxxx: 9 records
+2000-12-31 21:31:26 router1.example.jp: insert xxxxxxxx: 9 records
+2000-12-31 21:31:26 router1.example.jp: insert xxxxxxxxxxxx: 9 records
+2000-12-31 21:31:27 foobar unknown router0.example.jp
+2000-12-31 21:31:28 kkkkkkkkkk.example.com: insert xxxxxxx: (99999 records in 11.22222 sec)
+2000-12-31 21:31:28 qqqqqqqqqq.example.com: insert xxxxxxxxxx: 99 records
+2000-12-31 21:31:28 dddddddddd.example.com: insert xxxxxxxxx: 9 records
+2000-12-31 21:31:28 nnnnnnnnnn.example.com: insert xxxxxxxxxxxxx: 99 records
+2000-12-31 21:31:28 iiiiiiiiii.example.com: insert xxxxxxxxx: 9 records
+2000-12-31 21:31:28 oooooooooo.example.com: insert xxxxxxxx: 9999 records
+2000-12-31 21:31:28 jjjjjjjjjj.example.com: insert xxxxxxxxxxxx: 9 records
+2000-12-31 21:31:29 #2: (8193) end
+2000-12-31 21:31:30 router0.example.jp: insert xxxxxxx: (9999 records in 1.222222 sec)
+2000-12-31 21:31:30 router0.example.jp: insert xxxxxxxxxx: 99 records
+2000-12-31 21:31:30 router0.example.jp: insert xxxxxxxxx: 9 records
+2000-12-31 21:31:30 router0.example.jp: insert xxxxxxxxxxxxx: 99 records
+2000-12-31 21:31:30 router0.example.jp: insert xxxxxxxxx: 9 records
+2000-12-31 21:31:30 router0.example.jp: insert xxxxxxxx: 9 records
+2000-12-31 21:31:30 router0.example.jp: insert xxxxxxxxxxxx: 9 records
+2000-12-31 21:31:30 #1: (8192) end
+2000-12-31 21:31:30 waiting children, done (pid 8180)
+2000-12-31 21:31:30 foobar unknown: elapsed 11.222222 sec
+2000-12-31 21:31:30 unlocked: "/tmp/zzzfoobaror-lock" (pid 8180)
+2000-12-31 21:31:30 END: foobarorController (pid 8180)
