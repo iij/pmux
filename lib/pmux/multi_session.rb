@@ -39,7 +39,6 @@ module Pmux
 
       @scptable = {}
       @scpid = 0
-      @scps = {}
       @scp_queue = {}
       @buffers = {}
 
@@ -132,9 +131,6 @@ module Pmux
       queue = (@scp_queue[addr] ||= [])
 
       if (scp = @sessions[addr].scp)
-      #if (scp = @scps[addr]) or
-      #     (@sessions[addr] and @sessions[addr].ssh and
-      #      scp = (@scps[addr] = @sessions[addr].scp))
         scp_upload_sub scp, addr, future, local, remote, options
       else
         queue.push [:up, future, addr, remote, local, options]
@@ -159,9 +155,6 @@ module Pmux
       queue = (@scp_queue[addr] ||= [])
 
       if (scp = @sessions[addr].scp)
-      #if (scp = @scps[addr]) or
-      #     (@sessions[addr] and @sessions[addr].ssh and
-      #      scp = (@scps[addr] = @sessions[addr].scp))
         scp_download_sub scp, addr, future, remote, local, options
       else
         queue.push [:down, future, addr, remote, local, options]
@@ -202,7 +195,6 @@ module Pmux
     end
 
     def process_scp_queue_once addr
-      #scp = @scps[addr]
       scp = @sessions[addr].scp
       queue = (@scp_queue[addr] ||= [])
       if scp and !queue.empty?
