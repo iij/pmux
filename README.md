@@ -24,6 +24,8 @@ on the GlusterFS client node
     gem install gflocator
     sudo gflocator
 
+Each of GlusterFS server nodes, SSH with authentication key is required.
+
 ## Usage
 
 show status
