@@ -145,7 +145,6 @@ module Pmux
       op.on('--reducer=CMD') {|arg| opts[:reducer] = arg}
       op.on('--num-r=NUM', Integer) {|arg| opts[:num_r] = arg}
       op.on('--root-dir=DIR') {|arg| opts[:root_dir] = arg}
-      op.on('--sec', '--connect-secondary') {opts[:connect_secondary] = true}
       op.on('--ship-file=FILE', '--file=FILE') {|arg|
         (opts[:ship_files] ||= []).push arg}
       op.on('--status') {opts[:status] = true}
