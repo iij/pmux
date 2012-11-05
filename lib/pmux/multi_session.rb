@@ -139,14 +139,35 @@ module Pmux
     end
 
     def scp_upload_sub scp, addr, future, local, remote, options
+      session = @sessions[addr]
+      if !session or session.scp_session_count > 5
+        queue = (@scp_queue[addr] ||= [])
+        queue.push [:up, future, addr, remote, local, options]
+        return
+      end
+      session.scp_session_count += 1
+
       scpid = @scpid
       @scpid += 1
       @scptable[scpid] = future
-      scp.upload(local, remote, options) {|ch, name, sent, total|
-        if sent >= total
-          future.set_result nil, sent
-          @scptable.delete scpid
-        end
+
+      channel = scp.upload(local, remote, options)
+      channel.on_eof {|ch|
+        session.scp_session_count -= 1
+        @loop.set_timer(0) {process_scp_queue_once addr}
+
+        future.set_result(nil, options[:set_result])
+        @scptable.delete scpid
+      }
+      channel.on_open_failed {|ch, code, desc|
+        Log.error "#{addr}: scp error: #{desc}"
+        err = RuntimeError.new "scp error: #{desc}"
+        @on_error.call addr, err
+        session.scp_session_count -= 1
+        @loop.set_timer(0) {process_scp_queue_once addr}
+
+        future.set_result(nil, options[:set_result])
+        @scptable.delete scpid
       }
     end
 
