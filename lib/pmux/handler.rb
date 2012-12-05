@@ -194,6 +194,21 @@ module Pmux
       'hello'
     end
 
+    def ls dirs, args
+      res = []
+      for dir in dirs
+        for arg in args
+          Dir.chdir(dir) {
+            res += Dir.glob(arg).select {|path|
+              File.readable? path}.map {|path|
+              [path, File.join(dir, path)]
+            }
+          }
+        end
+      end
+      res
+    end
+
     def quit
       @server.loop.stop
       cleaner = Cleaner.new "#{options[:tmp_dir]}/[0-9]*"

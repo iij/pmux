@@ -102,4 +102,47 @@ module Pmux
       end
     end
   end
+
+  class BBFSAdapter < GlusterFSAdapter
+    Adapters['bbfs'] = self
+
+    def connect_to_storage locator_host, locator_port
+      @addr2dirs = {}
+      for b in @options[:bricks]
+        if b =~ %r{(\S+):(.+)}
+          dir = $2
+          addr = getaddr $1
+          (@addr2dirs[addr] ||= []).push dir
+        end
+      end
+      @addrs = @addr2dirs.keys
+      @h = init_node_hash @addrs
+    end
+
+    def get_files args, glob_flag=false
+      @locations = {}
+      mf = MR::MultiFuture.new
+      mf.on_success {|f|
+        addr = f.addr
+        res = f.get
+        for rpath, apath in res
+          (@locations[rpath] ||= []).push [addr, apath]
+        end
+      }
+      msession = MRSession.new @addrs, @options
+      msession.connect
+      for addr in @addrs
+        future = msession.call_async addr, 'ls', @addr2dirs[addr], args
+        mf.add future
+      end
+      mf.join_all
+      @locations.keys
+    end
+
+    def lookup_file file
+      @locations[file]
+    end
+
+    private
+  end
 end

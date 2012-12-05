@@ -150,7 +150,7 @@ module Pmux
       locator_host = options[:locator_host] || addrs.first || 'localhost'
       locator_port = options[:locator_port]
 
-      puts "storage: #{options[:storage_name]}" if options[:verbose]
+      puts "storage: #{adapter.class}" if options[:verbose]
       begin
         adapter.connect_to_storage locator_host, locator_port
         files = adapter.get_files argv, options[:expand_glob]
@@ -181,6 +181,7 @@ module Pmux
       op.on('--debug') {$debug = true; STDOUT.sync = true}
       op.on('--server') {opts[:server] = true}
       op.on('--argv=FILES') {}
+      op.on('--brick=HOST:/DIR', '-b') {|arg| (opts[:bricks] ||= []).push arg}
       op.on('--config-file=FILE', '-F') {|arg| opts[:config_file] = arg}
       op.on('--disable-plugins') {opts[:disable_plugins] = true}
       op.on('--expand-glob') {opts[:expand_glob] = true}
