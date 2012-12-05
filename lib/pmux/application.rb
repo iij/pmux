@@ -71,6 +71,39 @@ module Pmux
       File.unlink options[:sock_path] rescue nil
     end
 
+    def show_joblog options
+      log_dir = options[:log_dir]
+      if (job_id = options[:show_joblog]) == true
+        joblogs = Dir.glob(log_dir + '/*.yml').map {|path|
+          obj = YAML.load_file path
+        }
+        for h in joblogs.sort_by {|obj| obj[:start_time]}
+          line = format '%-10s %s "%s"', h[:id],
+            h[:start_time].strftime("%m/%d %H:%M"), h[:mapper]
+          puts line
+        end
+      else
+        path = File.join log_dir, "#{job_id}.yml"
+        els = {}
+        open(path) {|io|
+          header, tasks, footer = YAML.load_documents io
+          for task_id, task in tasks.sort_by {|k, v| k}
+            line = format '%5d %s %g',
+              task_id, task['node_addr'], task['welapse']
+            puts line
+            els[task['node_addr']] ||= [0, 0]
+            els[task['node_addr']][0] += 1
+            els[task['node_addr']][1] += task['welapse']
+          end
+        }
+        puts
+        for node_addr, v in els
+          puts format '%s %g/%d = %g',
+            node_addr, v[1], v[0], v[1] / v[0]
+        end
+      end
+    end
+
     def show_status addrs, options
       addrs = ['localhost'] if addrs.empty?
       adapter = StorageAdapter.create options[:storage_name], addrs
@@ -164,6 +197,7 @@ module Pmux
       op.on('--root-dir=DIR') {|arg| opts[:root_dir] = arg}
       op.on('--ship-file=FILE', '--file=FILE') {|arg|
         (opts[:ship_files] ||= []).push arg}
+      op.on('--show-joblog [job_id]') {|arg| opts[:show_joblog] = arg || true}
       op.on('--status') {opts[:status] = true}
       op.on('--storage=STORAGE_NAME') {|arg|
         opts[:storage_name] = arg}
