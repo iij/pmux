@@ -1,4 +1,5 @@
 require 'optparse'
+require 'yaml'
 
 module Pmux
   class Application
@@ -7,6 +8,7 @@ module Pmux
     def run options=OPTS
       optparser = optparse options
       optparser.parse!
+      load_config options
       options[:program_name] = optparser.program_name
       options[:user] ||=
         (ENV['USER'] || ENV['LOGNAME'] || Etc.getlogin || Etc.getpwuid.name)
@@ -30,8 +32,22 @@ module Pmux
         show_status addrs, options
       when options[:lookup]
         lookup addrs, options
+      when options[:show_joblog]
+        show_joblog options
       else
         run_mr addrs, options
+      end
+    end
+
+    def load_config options
+      path = File.expand_path(options[:config_file] || "~/.pmux/config.yml")
+      if File.file? path
+        conf = YAML.load_file path
+        if conf.kind_of? Hash
+          for k, v in conf
+            options[k.intern] ||= v
+          end
+        end
       end
     end
 
@@ -132,6 +148,7 @@ module Pmux
       op.on('--debug') {$debug = true; STDOUT.sync = true}
       op.on('--server') {opts[:server] = true}
       op.on('--argv=FILES') {}
+      op.on('--config-file=FILE', '-F') {|arg| opts[:config_file] = arg}
       op.on('--disable-plugins') {opts[:disable_plugins] = true}
       op.on('--expand-glob') {opts[:expand_glob] = true}
       op.on('--ff=FF', Integer) {|arg| opts[:ff] = arg}
