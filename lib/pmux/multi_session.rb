@@ -43,6 +43,7 @@ module Pmux
       @buffers = {}
 
       @on_error = nil
+      @session_lim = ($test ? 99 : 2)
     end
 
     def connect_to_addr addr, cmd=nil
@@ -140,7 +141,7 @@ module Pmux
 
     def scp_upload_sub scp, addr, future, local, remote, options
       session = @sessions[addr]
-      if !session or session.scp_session_count > 5
+      if !session or session.scp_session_count > @session_lim
         queue = (@scp_queue[addr] ||= [])
         queue.push [:up, future, addr, remote, local, options]
         return
@@ -185,7 +186,7 @@ module Pmux
 
     def scp_download_sub scp, addr, future, remote, local, options
       session = @sessions[addr]
-      if !session or session.scp_session_count > 5
+      if !session or session.scp_session_count > @session_lim
         queue = (@scp_queue[addr] ||= [])
         queue.push [:down, future, addr, remote, local, options]
         return
