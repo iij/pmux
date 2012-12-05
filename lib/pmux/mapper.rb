@@ -75,18 +75,19 @@ module Pmux
       mapper_cmd = @task['mapper'] || 'cat'
       err_path = "#{tmp_dir}/.err.#{object_id}"
       err_msg = nil
+      pipeio = nil
       if @num_r <= 1
         cmd_line = fix_cmd_line mapper_cmd,
           @path, nil, err_path, tmp_dir
         Log.debug "pipe: #{cmd_line}"
-        pipeio = PipeIO.new cmd_line
+        Dir.chdir(tmp_dir) {pipeio = PipeIO.new cmd_line}
         out = open("#{@ifbase}-0", 'a')
         pipeio.on_receive {|data| out.write data}
       else # @num_r >= 2
         partitioner = TextPartitioner.new @ifbase, @num_r,
           :separator=>@task['separator']
         cmd_line = fix_cmd_line mapper_cmd, @path, nil, err_path, tmp_dir
-        pipeio = PipeIO.new cmd_line
+        Dir.chdir(tmp_dir) {pipeio = PipeIO.new cmd_line}
         pipeio.on_receive {|data| partitioner.emit data}
       end
       on_success = @on_success

@@ -59,7 +59,8 @@ module Pmux
       cmd_line = fix_cmd_line reducer_cmd,
         @paths.join(' '), nil, err_path, tmp_dir
       Log.debug "popen: #{cmd_line}"
-      pipeio = PipeIO.new cmd_line
+      pipeio = nil
+      Dir.chdir(@tmp_dir) {pipeio = PipeIO.new cmd_line}
       if @on_receive
         pipeio.on_receive &@on_receive
       else
