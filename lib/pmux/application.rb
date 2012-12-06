@@ -71,6 +71,8 @@ module Pmux
       File.unlink options[:sock_path] rescue nil
     end
 
+    alias :putline :puts
+
     def show_joblog options
       log_dir = options[:log_dir]
       if (job_id = options[:show_joblog]) == true
@@ -80,25 +82,27 @@ module Pmux
         for h in joblogs.sort_by {|obj| obj[:start_time]}
           line = format '%-10s %s "%s"', h[:id],
             h[:start_time].strftime("%m/%d %H:%M"), h[:mapper]
-          puts line
+          putline line
         end
       else
         path = File.join log_dir, "#{job_id}.yml"
         els = {}
         open(path) {|io|
-          header, tasks, footer = YAML.load_documents io
+          s = YAML.load_stream io
+          header, tasks, footer = s[0], s[1], s[2]
           for task_id, task in tasks.sort_by {|k, v| k}
             line = format '%5d %s %g',
               task_id, task['node_addr'], task['welapse']
-            puts line
-            els[task['node_addr']] ||= [0, 0]
-            els[task['node_addr']][0] += 1
-            els[task['node_addr']][1] += task['welapse']
+            putline line
+            node_addr = task['node_addr']
+            els[node_addr] ||= [0, 0]
+            els[node_addr][0] += 1
+            els[node_addr][1] += task['welapse']
           end
         }
-        puts
+        putline
         for node_addr, v in els
-          puts format '%s %g/%d = %g',
+          putline format '%s %g/%d = %g',
             node_addr, v[1], v[0], v[1] / v[0]
         end
       end
