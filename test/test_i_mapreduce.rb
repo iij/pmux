@@ -53,7 +53,7 @@ end
 class Pmux::Cleaner
   def run lim_time=nil
     lim_time = Time.now - 3600
-    clean @glob_pat, lim_time
+    @glob_pats.each {|glob_pat| clean glob_pat, lim_time}
   end
 end
 

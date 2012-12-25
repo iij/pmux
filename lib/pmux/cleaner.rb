@@ -12,7 +12,7 @@ module Pmux
     end
 
     def clean glob_pat=nil, lim_time=nil
-      glob_pat ||= @glob_pat
+      glob_pat ||= ''
       lim_time ||= Time.now - 3600*24*7
       paths = Dir.glob glob_pat
       for path in paths
