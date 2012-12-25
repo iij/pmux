@@ -85,14 +85,15 @@ module Pmux
       end
 
       Log.info "END"
-      job[:end_time] = Time.now
+      job[:job_finished_at] = Time.now
       jl.dump_footer
       jl.close
 
       mf_quit = msession.multicast_call_async :quit
       mf_quit.join_all
 
-      cleaner = Cleaner.new "#{options[:tmp_dir]}/w*"
+      cleaner = Cleaner.new "#{options[:tmp_dir]}/w*",
+        "#{options[:log_dir]}/*.yml"
       cleaner.run
     end
 
@@ -104,8 +105,6 @@ module Pmux
       task_id, node_addr, ifbase =
         result.values_at 'task_id', 'node_addr', 'ifbase'
       Log.info "receive result #{task_id} from #{node_addr}"
-      jl.add task_id, :node_addr=>node_addr, :ifbase=>ifbase,
-        :welapse=>result['welapse']
       puts "receive result #{task_id} from #{node_addr}" if @verbose
       if result['error']
         if @on_error
@@ -146,8 +145,13 @@ module Pmux
       end
 
       task = job.get_task_by_id task_id
-      task[:elapse] = Time.now - task[:alloc_time] if task[:alloc_time]
+      alloc_time = task[:alloc_time]
+      allocated_at = alloc_time - job[:job_started_at]
+      elapse = Time.now - alloc_time if alloc_time
       task[:welapse] = result['welapse']
+      jl.add task_id, :node_addr=>node_addr, :ifbase=>ifbase,
+        :welapse=>result['welapse'], :elapse=>elapse,
+        :allocated_at=>allocated_at
 
       # delete task
       scheduler.delete_task_from_job job, task, node_addr

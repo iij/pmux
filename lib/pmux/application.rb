@@ -79,9 +79,9 @@ module Pmux
         joblogs = Dir.glob(log_dir + '/*.yml').map {|path|
           obj = YAML.load_file path
         }
-        for h in joblogs.sort_by {|obj| obj[:start_time]}
-          line = format '%-10s %s "%s"', h[:id],
-            h[:start_time].strftime("%m/%d %H:%M"), h[:mapper]
+        for h in joblogs.sort_by {|obj| obj[:invoked_at].to_f}
+          t = (h[:invoked_at] || h[:start_time]).strftime("%m/%d %H:%M")
+          line = format '%-10s %s "%s"', h[:id], t, h[:mapper]
           putline line
         end
       else
@@ -146,7 +146,7 @@ module Pmux
     end
 
     def run_mr addrs, options, argv=ARGV
-      options[:__start_time] = Time.now
+      invoked_at = Time.now
       if options[:storage_name] == 'local' and addrs.empty?
         addrs = ['localhost']
       end
@@ -158,7 +158,6 @@ module Pmux
       begin
         adapter.connect_to_storage locator_host, locator_port
         files = adapter.get_files argv, options[:expand_glob]
-        options[:__get_files_time] = Time.now
       rescue
         STDERR.puts "Storage Error: #{$!}"
         return
@@ -176,6 +175,7 @@ module Pmux
       end
       dispatcher = TaskDispatcher.new options, adapter, msession
       job = Job.new options, files
+      job[:invoked_at] = invoked_at
       job.mk_reducer_addrs adapter.addrs
       dispatcher.run job
     end

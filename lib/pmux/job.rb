@@ -20,7 +20,7 @@ module Pmux
       @done_taskhash = {}
       @tasks = mk_tasks files
       @num_t = @tasks.size + @num_r
-      @h = {:start_time=>Time.now,
+      @h = {:job_started_at=>Time.now,
         :map_tasks=>@tasks.size, :reduce_tasks=>@num_r,
       }
     end
@@ -86,7 +86,7 @@ module Pmux
     def to_jlheader
       h = {:id=>id, :files_first=>@files.first, :tasksize=>@tasks.size,
         :params=>@params,
-        :start_time=>@h[:start_time],
+        :invoked_at=>@h[:invoked_at], :job_started_at=>@h[:job_started_at],
         :map_tasks=>@h[:map_tasks], :reduce_tasks=>@h[:reduce_tasks],
         :storage_name=>@params[:storage_name],
         :mapper=>@params[:mapper], :reducer=>@params[:reducer],
@@ -95,7 +95,7 @@ module Pmux
     end
 
     def to_jlfooter
-      h = {:end_time=>@h[:end_time]}
+      h = {:job_finished_at=>@h[:job_finished_at]}
     end
   end
 end
