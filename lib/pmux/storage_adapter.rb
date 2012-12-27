@@ -120,6 +120,9 @@ module Pmux
     end
 
     def get_files args, glob_flag=false
+      msession = MRSession.new @addrs, @options
+      msession.on_error {|addr, err| $stderr.printf "%s: %s\n", addr, err.to_s}
+      msession.connect
       @locations = {}
       mf = MR::MultiFuture.new
       mf.on_success {|f|
@@ -129,8 +132,6 @@ module Pmux
           (@locations[rpath] ||= []).push [addr, apath]
         end
       }
-      msession = MRSession.new @addrs, @options
-      msession.connect
       for addr in @addrs
         future = msession.call_async addr, 'ls', @addr2dirs[addr], args
         mf.add future
