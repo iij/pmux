@@ -6,7 +6,7 @@ end
 
 module Pmux
   class SessionWrapper
-    attr_reader :addr
+    attr_reader :addr, :scp_channels
     attr_accessor :ssh, :scp_session_count
 
     def initialize addr
@@ -14,6 +14,7 @@ module Pmux
       @ssh = nil
       @scp = nil
       @scp_session_count = 0
+      @scp_channels = {}
     end
 
     def scp
@@ -96,6 +97,10 @@ module Pmux
     end
 
     def error_on_addr addr, err=nil
+      session = @sessions[addr]
+      session.scp_channels.each_value {|ch|
+        ch.on_open_failed.call ch, 0xfe000001, err.to_s
+      }
       @err_addrs.push addr
       @addrs.delete addr
       @on_error.call addr, err if @on_error
@@ -117,13 +122,12 @@ module Pmux
       @on_error = block
     end
 
-    def scp_upload_files addr, files, remote, options={}, &block
+    def scp_upload_files addr, files, remote, options={}
       mf = MR::MultiFuture.new
       for file in files
         future = scp_upload addr, file, remote, options
         mf.add future
       end
-      mf.on_all &block if block
       mf
     end
 
@@ -153,8 +157,10 @@ module Pmux
       @scptable[scpid] = future
 
       channel = scp.upload(local, remote, options)
+      session.scp_channels[scpid] = channel
       channel.on_eof {|ch|
         session.scp_session_count -= 1
+        session.scp_channels.delete scpid
         @loop.set_timer(0) {process_scp_queue_once addr}
 
         future.set_result(nil, options[:set_result])
@@ -162,12 +168,18 @@ module Pmux
       }
       channel.on_open_failed {|ch, code, desc|
         Log.error "#{addr}: scp error: #{desc}"
-        err = RuntimeError.new "scp error: #{desc}"
-        @on_error.call addr, err
         session.scp_session_count -= 1
+        session.scp_channels.delete scpid
         @loop.set_timer(0) {process_scp_queue_once addr}
 
-        future.set_result(nil, options[:set_result])
+        if code == 0xfe000001
+          err = desc
+        else
+          err = RuntimeError.new "scp error: #{desc}"
+          @on_error.call addr, err
+          err = nil
+        end
+        future.set_result(err, options[:set_result])
         @scptable.delete scpid
       }
     end
