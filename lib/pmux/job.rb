@@ -7,6 +7,7 @@ module Pmux
     attr_reader :tasks, :num_t, :num_r
     attr_reader :taskhash
     attr_reader :reducers
+    attr_reader :failed
 
     def initialize params, files
       @params = params
@@ -23,6 +24,7 @@ module Pmux
       @h = {:job_started_at=>Time.now,
         :map_tasks=>@tasks.size, :reduce_tasks=>@num_r,
       }
+      @failed = false
     end
 
     def mk_tasks files
@@ -81,6 +83,11 @@ module Pmux
 
     def completed?
       @taskhash.empty?
+    end
+
+    def set_failed
+      @taskhash.clear
+      @failed = true
     end
 
     def to_jlheader

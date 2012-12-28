@@ -90,14 +90,16 @@ module Pmux
         open(path) {|io|
           s = YAML.load_stream io
           header, tasks, footer = s[0], s[1], s[2]
-          for task_id, task in tasks.sort_by {|k, v| k}
-            line = format '%5d %s %g',
-              task_id, task['node_addr'], task['welapse']
-            putline line
-            node_addr = task['node_addr']
-            els[node_addr] ||= [0, 0]
-            els[node_addr][0] += 1
-            els[node_addr][1] += task['welapse']
+          if tasks
+            for task_id, task in tasks.sort_by {|k, v| k}
+              line = format '%5d %s %g',
+                task_id, task['node_addr'], task['welapse']
+              putline line
+              node_addr = task['node_addr']
+              els[node_addr] ||= [0, 0]
+              els[node_addr][0] += 1
+              els[node_addr][1] += task['welapse']
+            end
           end
         }
         putline
@@ -178,6 +180,7 @@ module Pmux
       job[:invoked_at] = invoked_at
       job.mk_reducer_addrs adapter.addrs
       dispatcher.run job
+      abort if job.failed
     end
 
     def optparse opts

@@ -57,13 +57,14 @@ module Pmux
             scheduler.shipped[addr] = true
             scheduler.process_queue
           }
+          mf_scp.on_error {job.set_failed}
         else
           puts 'start scheduler' if @verbose
           scheduler.shipped[addr] = true
           scheduler.process_queue
         end
       }
-      mf_init.on_error {job.taskhash.clear}
+      mf_init.on_error {job.set_failed}
 
       # wait for all map tasks to finish
       until job.completed?
@@ -109,6 +110,7 @@ module Pmux
       if result['error']
         if @on_error
           @on_error.call result
+          job.set_failed
         else
         end
       end
@@ -148,7 +150,7 @@ module Pmux
       alloc_time = task[:alloc_time]
       allocated_at = alloc_time - job[:job_started_at]
       elapse = Time.now - alloc_time if alloc_time
-      task[:welapse] = result['welapse']
+      #task[:welapse] = result['welapse']
       jl.add task_id, :node_addr=>node_addr, :ifbase=>ifbase,
         :welapse=>result['welapse'], :elapse=>elapse,
         :allocated_at=>allocated_at
