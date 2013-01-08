@@ -1,0 +1,57 @@
+---
+:id: '1234567890'
+:files_first: /dist/apache/access.20001101_0.log.gz
+:tasksize: 6
+:params:
+  :disable_plugins: true
+  :ship_files:
+  - tmp/apache_sum.rb
+  :mapper: apache_sum.rb
+  :reducer: apache_sum.rb
+  :program_name: pmux
+  :user: foo
+  :root_dir: /home/foo/.pmux
+  :tmp_dir: /home/foo/.pmux/tmp
+  :log_dir: /home/foo/.pmux/log
+  :__start_time: 2000-11-30 09:42:41.111131000 +09:00
+  :__get_files_time: 2000-11-30 09:42:41.130985000 +09:00
+  :num_r: 1
+  :job_name: ! '"apache_sum.rb"'
+:start_time: 2000-11-30 09:42:41.158194000 +09:00
+:map_tasks: 6
+:reduce_tasks: 1
+:storage_name: 
+:mapper: apache_sum.rb
+:reducer: apache_sum.rb
+:num_r: 1
+---
+2:
+  node_addr: "192.168.196.208"
+  ifbase: "/home/foo/.pmux/tmp/105459480/m2"
+  welapse: 0.037278
+4:
+  node_addr: "192.168.196.208"
+  ifbase: "/home/foo/.pmux/tmp/105459480/m4"
+  welapse: 0.036954
+1:
+  node_addr: "192.168.196.208"
+  ifbase: "/home/foo/.pmux/tmp/105459480/m1"
+  welapse: 5.009
+5:
+  node_addr: "192.168.196.224"
+  ifbase: "/home/foo/.pmux/tmp/105459480/m5"
+  welapse: 14.709426
+6:
+  node_addr: "192.168.196.224"
+  ifbase: "/home/foo/.pmux/tmp/105459480/m6"
+  welapse: 0.03236
+3:
+  node_addr: "192.168.196.224"
+  ifbase: "/home/foo/.pmux/tmp/105459480/m3"
+  welapse: 18.065011
+7:
+  node_addr: "192.168.196.208"
+  ifbase: nil
+  welapse: 0.0344
+---
+:end_time: 2000-11-30 09:43:00.172319000 +09:00
