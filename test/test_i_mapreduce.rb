@@ -147,8 +147,9 @@ class TestIMapreduce < Test::Unit::TestCase
     job = Pmux::Job.new options, files
     job.mk_reducer_addrs addrs
     dispatcher.run job
+    assert job.failed
     assert_match %r{/notexist: No such file or directory}, er['error_message']
-    ae 420, writer.lines.size
+    ae 0, writer.lines.size
   end
 
   # mr test; num_r=0, 4 files, ff=2

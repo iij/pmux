@@ -70,19 +70,21 @@ module Pmux
       until job.completed?
         msession.loop.run_once
       end
-      if job.num_r.zero?
-        gatherer.join_all
-      else
-        mf_shuffle.join_all
-        # reduce phase
-        job.mk_reduce_tasks
-        scheduler.inject_tasks job.tasks
-        scheduler.process_queue
-        # wait for all reduce tasks to finish
-        until job.completed?
-          msession.loop.run_once
+      unless job.failed
+        if job.num_r.zero?
+          gatherer.join_all
+        else
+          mf_shuffle.join_all
+          # reduce phase
+          job.mk_reduce_tasks
+          scheduler.inject_tasks job.tasks
+          scheduler.process_queue
+          # wait for all reduce tasks to finish
+          until job.completed?
+            msession.loop.run_once
+          end
+          gatherer.join_all
         end
-        gatherer.join_all
       end
 
       Log.info "END"
