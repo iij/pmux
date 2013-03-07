@@ -162,7 +162,7 @@ module Pmux
         files = adapter.get_files argv, options[:expand_glob]
       rescue
         STDERR.puts "Storage Error: #{$!}"
-        return
+        abort
       end
       raise RuntimeError, "no hostname specified" if adapter.addrs.empty?
 
