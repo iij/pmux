@@ -36,8 +36,10 @@ module Pmux
       @output_path = "#{@tmp_dir}/r#{@task['pindex']}"
       err_path = "#{@tmp_dir}/.err.#{$$}"
       err_msg = nil
+      #cmd_line = fix_cmd_line reducer_cmd,
+      #  @paths.join(' '), @output_path, err_path, tmp_dir
       cmd_line = fix_cmd_line reducer_cmd,
-        @paths.join(' '), @output_path, err_path, tmp_dir
+        "#{tmp_dir}/t*-#{@task['pindex']}", @output_path, err_path, tmp_dir
       Log.debug "system: #{cmd_line}"
       system cmd_line
       @exitstatus = $?.exitstatus
@@ -56,8 +58,10 @@ module Pmux
       @output_path = "#{@tmp_dir}/r#{@task['pindex']}"
       err_path = "#{@tmp_dir}/.rerr.#{$$}"
       err_msg = nil
+      #cmd_line = fix_cmd_line reducer_cmd,
+      #  @paths.join(' '), nil, err_path, tmp_dir
       cmd_line = fix_cmd_line reducer_cmd,
-        @paths.join(' '), nil, err_path, tmp_dir
+        "#{tmp_dir}/t*-#{@task['pindex']}", nil, err_path, tmp_dir
       Log.debug "popen: #{cmd_line}"
       pipeio = nil
       Dir.chdir(@tmp_dir) {pipeio = PipeIO.new cmd_line}
