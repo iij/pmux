@@ -52,6 +52,7 @@ module Pmux
           # fail
           tmp_queue.push task
           fail_count += 1
+          break if fail_count >= fail_lim
         end
 
         loop_count += 1
